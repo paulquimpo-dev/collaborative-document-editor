@@ -370,3 +370,37 @@ As implementation proceeds, this log will record the actual checks performed, in
 - Phase 3 exit checks pass.
 - Phase 3 awaits candidate confirmation.
 - Suggested candidate commit: `test: add document sharing authorization coverage`.
+
+### 2026-08-21 — Phase 4: Frontend Shell and User Switching
+
+#### AI assistance
+
+- Re-read the Phase 4 requirements, UI/UX guide, environment rules, and suggested commit message before implementation.
+- Added a typed API client that requires `VITE_API_BASE_URL`, composes relative paths, attaches `X-User-Id`, and surfaces readable backend/network errors.
+- Built the semantic desktop application shell, compact sidebar, owned/shared document groups, selectable rows, active-user switcher, empty/loading/error states, and document-selection surface.
+- Used local component state and retained only the validated active-user ID in local storage; no global state dependency was introduced.
+- Applied the guide's slate/white surfaces, single Indigo accent, 8px-based spacing, subtle borders/shadows, focus states, ownership labels, and desktop tolerance.
+
+#### Problems encountered and response
+
+- The first combined patch was rejected because it targeted the stylesheet twice; no files changed, and the edits were reapplied in separate patches.
+- Browser integration initially failed because stale Vite and Django development processes were still serving pre-environment and pre-CORS configuration. Exact listener processes were identified and only those local development processes were restarted.
+- Browser preflight exposed missing permission for `X-User-Id` and modern local private-network access. Added the custom header explicitly and made private-network CORS behavior environment-controlled.
+- Aligned the local frontend API URL with Django's IPv4 bind address through `frontend/.env`; no URL was added to application source.
+
+#### Verification
+
+- Frontend ESLint and the TypeScript/Vite production build passed.
+- All five PostgreSQL backend tests and Django system checks passed.
+- Browser DOM inspection confirmed semantic headings, labels, navigation, buttons, counts, ownership details, empty states, and selection states.
+- Visual inspection confirmed the intended clean desktop productivity layout and sufficient contrast.
+- Switched Alex to Paul without a page reload and confirmed selection cleared while owned/shared counts and lists refreshed correctly.
+- Confirmed the browser successfully completed CORS preflight and API requests using `X-User-Id`.
+- Removed all temporary visual-test documents and their share after verification.
+
+#### Result
+
+- Phase 4 exit checks pass.
+- The candidate approved Phase 4 for commit and push.
+- At approval, the assessment timer showed 130 minutes 30 seconds remaining; remaining work was reallocated toward editor persistence, deployment, sharing, import, quality, and submission buffer.
+- Suggested candidate commit: `feat: add document workspace and user switching`.

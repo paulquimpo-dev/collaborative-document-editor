@@ -8,7 +8,7 @@ A lightweight collaborative document editing application demonstrating rich-text
 
 ## Current Status
 
-Phase 2 document CRUD and backend authorization are implemented and verified against PostgreSQL. The permanent authorization API test is next in the ordered phases defined in `DevelopmentPhases.md`.
+Phase 4 provides the API-backed frontend workspace, seeded-user switching, and separate owned/shared document lists. Rich-text editing and persistence UI are next in the ordered phases defined in `DevelopmentPhases.md`.
 
 ## Planned Core Features
 
@@ -56,6 +56,15 @@ DATABASE_URL=postgresql://USER:PASSWORD@localhost:5432/collaborative_document_ed
 Percent-encode PostgreSQL passwords containing URL-reserved characters such as `@`, `:`, `/`, `?`, or `#`. Django loads `backend/.env` automatically; frontend variables remain isolated in `frontend/.env` and must never contain server secrets.
 
 `DATABASE_URL` is required. Django will fail with a clear configuration error rather than silently selecting a different database. An emergency SQLite fallback remains possible only by explicitly setting a SQLite `DATABASE_URL` and documenting the decision.
+
+Local cross-port browser development also requires:
+
+```text
+CORS_ALLOWED_ORIGINS=http://localhost:5173
+CORS_ALLOW_PRIVATE_NETWORK=true
+```
+
+The backend explicitly permits the simulated `X-User-Id` request header. Hosted environments should set private-network access according to their network topology rather than copying the local value blindly.
 
 Seeded users:
 

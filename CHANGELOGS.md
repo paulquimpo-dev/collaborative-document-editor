@@ -8,6 +8,11 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Added
 
+- Added the environment-configured typed frontend API client and document/user request functions.
+- Added the desktop application shell, compact sidebar, user switcher, owned/shared document lists, selection state, and workspace state cards.
+- Added loading, empty, API-error, ownership, document-count, and active-selection feedback.
+- Added explicit backend CORS support for `X-User-Id` and environment-controlled private-network development requests.
+- Added semantic landmarks, labels, focus states, reduced-motion handling, and desktop-width tolerance.
 - Added a permanent PostgreSQL-backed authorization API test covering owner access, shared-user access and updates, and unshared-user isolation.
 - Added permanent coverage proving shared users cannot delete owner documents.
 - Added reusable simulated-user resolution through `X-User-Id` with stable `401` errors.
@@ -74,6 +79,12 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Verification
 
+- Passed frontend ESLint and the TypeScript/Vite production build.
+- Visually verified the Phase 4 layout and interaction states in the local browser.
+- Confirmed switching Alex to Paul refreshes owned/shared lists and clears selection without a page reload.
+- Confirmed local browser CORS preflight permits private-network access and `X-User-Id`.
+- Confirmed temporary Phase 4 visual fixtures were removed after testing.
+- Candidate approved the verified Phase 4 workspace for commit and push.
 - Passed five backend tests on a clean PostgreSQL test database, including the two new authorization API tests.
 - Confirmed the shared-user update persists, unshared retrieval/update returns `404`, and shared deletion returns `403` without deleting the document.
 - Passed the complete Phase 2 API behavior matrix in a rolled-back PostgreSQL transaction.

@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import dj_database_url
+from corsheaders.defaults import default_headers
 from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
@@ -92,6 +93,10 @@ CORS_ALLOWED_ORIGINS = [
     for origin in required_env("CORS_ALLOWED_ORIGINS").split(",")
     if origin.strip()
 ]
+CORS_ALLOW_HEADERS = (*default_headers, "x-user-id")
+CORS_ALLOW_PRIVATE_NETWORK = (
+    required_env("CORS_ALLOW_PRIVATE_NETWORK").lower() == "true"
+)
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],

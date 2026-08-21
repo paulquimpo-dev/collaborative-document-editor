@@ -51,4 +51,13 @@ This implementation focuses on the smallest coherent collaborative document work
 - The primary authorization test proves the owner and shared user can retrieve the document, the shared user can persist an update, and an unshared user receives `404` for retrieval and update.
 - A focused owner-only test proves a shared user receives `403` when deleting and that the document remains persisted.
 
-Frontend responsibilities, deployment configuration, and further verification notes will be expanded as their implementation phases are completed.
+### Frontend Workspace
+
+- A small typed API client requires `VITE_API_BASE_URL`, composes it with relative REST paths, and attaches `X-User-Id` only to protected requests.
+- React component state owns users, the active simulated user, owned/shared document summaries, selection, loading, and errors; no global state library is needed.
+- The selected user ID is retained in local storage for reviewer convenience, but is accepted only when it still exists in the API-provided user list.
+- Changing users immediately clears selection and stale lists, then fetches the new user's authorized document groups.
+- The shell uses semantic sidebar, navigation, header, main, list, status, and alert structures with visible focus states.
+- Local CORS explicitly permits `X-User-Id` and environment-controlled private-network access for the split development origins.
+
+Editor responsibilities, deployment configuration, and further verification notes will be expanded as their implementation phases are completed.
