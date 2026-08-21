@@ -8,7 +8,7 @@ A lightweight collaborative document editing application demonstrating rich-text
 
 ## Current Status
 
-Phase 5 provides document creation, rich-text editing, explicit saving, persisted TipTap JSON, and refresh/reopen behavior. Deployment is next in the ordered phases defined in `DevelopmentPhases.md`.
+Phase 6 adds production deployment configuration for a Render Django API with managed PostgreSQL and a Vercel Vite frontend. Live deployment verification is completed through the checklist below.
 
 ## Planned Core Features
 
@@ -129,3 +129,34 @@ This assessment deliberately excludes production authentication, real-time colla
 Application code must not hardcode API base URLs, service origins, database URLs, credentials, secrets, or deployment hosts. Django reads server configuration from `backend/.env` locally. Vite reads browser-safe configuration from `frontend/.env`. Deployment platforms provide the same variables through their environment settings.
 
 Frontend requests use `VITE_API_BASE_URL` plus relative API paths. Never place secrets in `VITE_*` variables. When configuration changes, update the matching `.env.example` and this README.
+
+## Production Deployment
+
+### 1. Backend and PostgreSQL on Render
+
+1. Push the repository with `render.yaml` to GitHub.
+2. In Render, create a **Blueprint** from this repository and apply it.
+3. When prompted for `DJANGO_ALLOWED_HOSTS`, enter only the generated backend hostname, without a scheme or path (for example, `your-service.onrender.com`).
+4. For the initial `CORS_ALLOWED_ORIGINS` value, enter the intended Vercel production origin including `https://`. Correct it after Vercel assigns the final URL if necessary.
+5. Confirm the build completes. The build installs dependencies, collects static files, migrates the managed PostgreSQL database, and idempotently seeds Paul and Alex.
+6. Open `https://<backend-host>/api/health/` and confirm the JSON health response.
+
+Never copy the production database URL or secret into a repository file. Render injects `DATABASE_URL` from the managed database and generates `DJANGO_SECRET_KEY`.
+
+### 2. Frontend on Vercel
+
+1. Import the same GitHub repository into Vercel.
+2. Set **Root Directory** to `frontend`; Vercel should detect Vite and use `npm run build` with output directory `dist`.
+3. Add `VITE_API_BASE_URL=https://<backend-host>/api` to the Production environment. This is browser-visible and must not contain secrets.
+4. Deploy and copy the final `https://<project>.vercel.app` origin.
+5. In Render, set `CORS_ALLOWED_ORIGINS` to that exact origin and redeploy the backend if the initial value differed.
+
+### 3. Production Smoke Test
+
+- Open the Vercel URL and confirm Paul and Alex load in the user switcher.
+- As Paul, create a document, rename it, add rich text and formatting, then save.
+- Refresh, reopen the document from **My Documents**, and confirm the title, content, and formatting persisted.
+- Switch users and confirm the request succeeds across origins; at this phase Alex is expected not to see Paul's unshared document.
+- In browser developer tools, confirm protected API requests target the Render `/api` URL and include `X-User-Id` without a CORS error.
+
+Record the final frontend and backend URLs in `SUBMISSION.md` only after this smoke test passes. Free services can cold-start; document that limitation rather than adding infrastructure.

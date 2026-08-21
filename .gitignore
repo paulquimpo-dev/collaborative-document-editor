@@ -4,6 +4,7 @@ backend/__pycache__/
 backend/**/__pycache__/
 backend/*.sqlite3
 backend/.env
+backend/staticfiles/
 *.py[cod]
 
 # Node
@@ -16,4 +17,3 @@ frontend/.env
 .idea/
 .DS_Store
 Thumbs.db
-

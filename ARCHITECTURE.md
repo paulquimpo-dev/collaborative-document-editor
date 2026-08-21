@@ -69,4 +69,11 @@ This implementation focuses on the smallest coherent collaborative document work
 - Save status is explicit and accessible: Unsaved changes, Saving, Saved, or Save failed with retained content and retry.
 - Browser unload, document switching, user switching, and new-document creation guard unsaved changes.
 
-Deployment configuration and further verification notes will be expanded as their implementation phases are completed.
+### Production Topology
+
+- Vercel builds and serves the `frontend/` Vite application as static assets.
+- Render runs the `backend/` Django WSGI application with Gunicorn and serves Django static assets through WhiteNoise.
+- A Render-managed PostgreSQL instance supplies `DATABASE_URL` directly to the backend service.
+- The Render build runs static collection, migrations, and the idempotent seeded-user command before startup.
+- The two origins are intentionally configured explicitly: Vercel receives the Render API base URL through `VITE_API_BASE_URL`, while Render receives the exact Vercel origin through `CORS_ALLOWED_ORIGINS`.
+- `render.yaml` defines infrastructure shape but leaves generated hosts/origins as dashboard-supplied values, avoiding repository-bound deployment URLs.

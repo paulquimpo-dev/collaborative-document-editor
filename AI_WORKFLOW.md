@@ -443,3 +443,25 @@ As implementation proceeds, this log will record the actual checks performed, in
 - No unsaved verification edit was transmitted to PostgreSQL.
 - The candidate repeated the Phase 5 manual test after the correction and confirmed the complete phase, including the revised unsaved-change workflow.
 - The candidate stopped both manually started development servers before authorizing commit and push.
+
+### 2026-08-21 — Phase 6: First Deployment Checkpoint
+
+#### AI assistance
+
+- Re-read the deployment phase, environment rules, architecture notes, and submission requirements before changing production configuration.
+- Checked current official Render Django/PostgreSQL and Vercel Vite/monorepo deployment guidance to avoid relying on stale platform settings.
+- Added a minimal Render Blueprint for the Django service and managed PostgreSQL database, including dependency installation, static collection, migrations, seeded users, Gunicorn startup, and health checking.
+- Added WhiteNoise solely for reliable Django static-file serving in production.
+- Kept generated service hosts, frontend origins, database credentials, and secrets outside source control; the hosting dashboards provide every environment-specific value.
+- Documented the exact Render/Vercel deployment sequence and live create/edit/save/refresh/reopen smoke test.
+
+#### Human direction and decisions
+
+- Explicitly authorized proceeding to the next phase after confirming Phase 5.
+- Retained PostgreSQL as the required production database and the Render/Vercel split proposed by the blueprint.
+- Must connect the GitHub repository to the candidate-owned hosting accounts and confirm the final generated service URLs.
+
+#### Result
+
+- Production configuration is ready for verification.
+- Phase 6 remains in progress until both live services are deployed and the production smoke test passes.

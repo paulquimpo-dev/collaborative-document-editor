@@ -1,0 +1,34 @@
+databases:
+  - name: collaborative-document-editor-db
+    plan: free
+    databaseName: collaborative_document_editor
+    user: collaborative_document_editor
+
+services:
+  - type: web
+    name: collaborative-document-editor-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: >-
+      pip install -r requirements.txt &&
+      python manage.py collectstatic --no-input &&
+      python manage.py migrate &&
+      python manage.py seed_users
+    startCommand: gunicorn config.wsgi:application
+    healthCheckPath: /api/health/
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: collaborative-document-editor-db
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DJANGO_ALLOWED_HOSTS
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: CORS_ALLOW_PRIVATE_NETWORK
+        value: "false"

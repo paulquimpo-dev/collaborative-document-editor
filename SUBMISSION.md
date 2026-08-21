@@ -16,7 +16,7 @@
 
 ## Live Application
 
-To be added after deployment.
+Add the verified Vercel application URL and Render API health URL here after the Phase 6 production smoke test.
 
 ## Seeded Users
 
@@ -31,7 +31,7 @@ To be added after the deployed flow is verified.
 
 ## Known Limitations
 
-PostgreSQL is the required primary database. Any emergency SQLite fallback will be disclosed here if PostgreSQL becomes a confirmed delivery blocker.
+PostgreSQL is used locally and is provisioned as the production database by the Render Blueprint. Render/Vercel free-tier cold starts may delay the first request after inactivity. Any emergency fallback or additional hosting limitation will be disclosed here if encountered during deployment.
 
 ## With Another 2–4 Hours
 
