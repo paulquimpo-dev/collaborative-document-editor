@@ -8,6 +8,13 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Added
 
+- Added an accessible custom unsaved-changes modal with Keep editing and Discard changes actions.
+- Added document detail, create, and update functions to the typed frontend API layer.
+- Added New Document creation with immediate editor opening and owned-list insertion.
+- Added the TipTap rich-text editor with bold, italic, underline, Heading 1/2, bullet-list, and numbered-list controls.
+- Added editable titles and structured TipTap JSON persistence through explicit Save.
+- Added Unsaved changes, Saving, Saved, Save failed, and inline error feedback.
+- Added unsaved-change guards for document/user switching, new document creation, and browser unload.
 - Added the environment-configured typed frontend API client and document/user request functions.
 - Added the desktop application shell, compact sidebar, user switcher, owned/shared document lists, selection state, and workspace state cards.
 - Added loading, empty, API-error, ownership, document-count, and active-selection feedback.
@@ -57,6 +64,7 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Changed
 
+- Replaced in-app native discard confirmations with a controlled modal and fixed the user switcher becoming visually stuck after cancel/discard.
 - Removed hardcoded Django configuration defaults; secret key, debug mode, allowed hosts, CORS origins, and database URL are now required environment values.
 - Made `DATABASE_URL` mandatory so Django cannot silently fall back to SQLite when PostgreSQL configuration is missing.
 - Changed the persistence decision from SQLite-first local development to PostgreSQL for both local development and deployment.
@@ -79,6 +87,13 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Verification
 
+- Confirmed Keep editing preserves the active user and unsaved content, and Discard changes completes the requested user switch.
+- Confirmed the user switcher remains reusable after either modal action and no discarded title reaches PostgreSQL.
+- Candidate manually confirmed the complete Phase 5 editor and corrected unsaved-change workflow.
+- Verified create, rename, rich-text formatting, save, browser refresh, reopen, and formatting persistence end to end.
+- Confirmed persisted TipTap markup contains headings, strong marks, paragraphs, and bullet-list structure after reopen.
+- Confirmed the unsaved-change navigation guard displays a native discard confirmation.
+- Removed the Phase 5 browser verification document after testing.
 - Passed frontend ESLint and the TypeScript/Vite production build.
 - Visually verified the Phase 4 layout and interaction states in the local browser.
 - Confirmed switching Alex to Paul refreshes owned/shared lists and clears selection without a page reload.

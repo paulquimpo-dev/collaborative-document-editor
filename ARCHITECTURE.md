@@ -60,4 +60,13 @@ This implementation focuses on the smallest coherent collaborative document work
 - The shell uses semantic sidebar, navigation, header, main, list, status, and alert structures with visible focus states.
 - Local CORS explicitly permits `X-User-Id` and environment-controlled private-network access for the split development origins.
 
-Editor responsibilities, deployment configuration, and further verification notes will be expanded as their implementation phases are completed.
+### Rich-Text Persistence
+
+- TipTap uses StarterKit plus Underline, avoiding duplicate heading/list extension registration.
+- Selecting a summary retrieves the latest complete document before mounting a keyed editor instance.
+- Editor updates produce TipTap JSON and mark local state dirty; no network save occurs until the explicit Save action.
+- Save PATCHes the title and structured content together, then updates both the editor state and matching sidebar summary from the server response.
+- Save status is explicit and accessible: Unsaved changes, Saving, Saved, or Save failed with retained content and retry.
+- Browser unload, document switching, user switching, and new-document creation guard unsaved changes.
+
+Deployment configuration and further verification notes will be expanded as their implementation phases are completed.

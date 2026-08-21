@@ -5,6 +5,8 @@ interface SidebarProps {
   documents: DocumentLists;
   selectedDocumentId: number | null;
   isLoading: boolean;
+  isCreating: boolean;
+  onNewDocument: () => void;
   onSelect: (document: DocumentSummary) => void;
 }
 
@@ -12,6 +14,8 @@ export function Sidebar({
   documents,
   selectedDocumentId,
   isLoading,
+  isCreating,
+  onNewDocument,
   onSelect,
 }: SidebarProps) {
   return (
@@ -25,8 +29,8 @@ export function Sidebar({
       </div>
 
       <div className="sidebar-actions" aria-label="Document actions">
-        <button type="button" className="button button-primary button-full" disabled title="Document creation is not available in this build">
-          <span aria-hidden="true">＋</span> New Document
+        <button type="button" className="button button-primary button-full" disabled={isCreating} onClick={onNewDocument}>
+          <span aria-hidden="true">＋</span> {isCreating ? "Creating…" : "New Document"}
         </button>
         <button type="button" className="button button-secondary button-full" disabled title="File import is not available in this build">
           <span aria-hidden="true">↑</span> Import File

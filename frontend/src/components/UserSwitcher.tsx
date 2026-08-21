@@ -15,7 +15,11 @@ export function UserSwitcher({ users, activeUserId, disabled, onChange }: UserSw
         id="active-user"
         value={activeUserId ?? ""}
         disabled={disabled || users.length === 0}
-        onChange={(event) => onChange(Number(event.target.value))}
+        onChange={(event) => {
+          const requestedUserId = Number(event.target.value);
+          if (activeUserId !== null) event.currentTarget.value = String(activeUserId);
+          onChange(requestedUserId);
+        }}
       >
         {users.length === 0 && <option value="">No users available</option>}
         {users.map((user) => <option key={user.id} value={user.id}>{user.name}</option>)}

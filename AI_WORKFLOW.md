@@ -404,3 +404,42 @@ As implementation proceeds, this log will record the actual checks performed, in
 - The candidate approved Phase 4 for commit and push.
 - At approval, the assessment timer showed 130 minutes 30 seconds remaining; remaining work was reallocated toward editor persistence, deployment, sharing, import, quality, and submission buffer.
 - Suggested candidate commit: `feat: add document workspace and user switching`.
+
+### 2026-08-21 — Phase 5: Editor and Persistence
+
+#### AI assistance
+
+- Re-read the Phase 5 scope and suggested commit message before implementation.
+- Extended the typed API layer for document detail, creation, and PATCH updates without hardcoded service origins.
+- Added a TipTap editor using StarterKit and Underline with bold, italic, underline, Heading 1/2, bullet-list, and numbered-list controls.
+- Added editable title, ownership context, explicit Save, dirty/saving/saved/error feedback, and inline save failures.
+- Enabled New Document to create, add to the owned list, and open immediately.
+- Added guards for dirty document switching, user switching, new-document creation, and browser unload.
+
+#### Verification and iteration
+
+- Frontend ESLint and TypeScript/Vite production build passed; the build reported a non-blocking bundle-size warning from the editor dependency, and code splitting was deliberately deferred to protect the timebox.
+- All five PostgreSQL backend tests and Django checks passed.
+- Browser testing created and opened a new document, renamed it, added a heading, bold content, and a bullet list, and showed Unsaved changes.
+- Save persisted the title and TipTap JSON through PATCH and updated the sidebar title.
+- After browser refresh and reopen, the heading, strong marks, paragraphs, and list structure were present in the rendered editor DOM.
+- The dirty-navigation test opened the expected native discard confirmation; browser automation timed out while the blocking modal was active, but the unsaved title was never transmitted.
+- Removed the single Phase 5 verification document after testing.
+
+#### Result
+
+- Phase 5 exit checks pass.
+- Phase 5 awaits candidate manual confirmation.
+- Suggested candidate commit: `feat: add rich-text editing and document persistence`.
+
+#### Manual-test defect and correction
+
+- Candidate testing found that the native unsaved-changes confirmation left the controlled user select visually stuck after either OK or Cancel and judged the browser-native prompt to be poor in-app UX.
+- Root cause: the native select changed its DOM value before React rejected the state transition; with application state unchanged, selecting the same visible option again did not emit another change.
+- Replaced in-app native confirmation with an accessible application modal offering Keep editing and Discard changes.
+- The user select now immediately restores the active value while navigation approval is pending.
+- Added safe default focus, Escape/backdrop cancellation, explicit warning copy, and destructive-action styling. Browser refresh/close retains the required native unload warning.
+- Browser verification confirmed Keep editing preserves Paul and unsaved content, while a second switch followed by Discard changes successfully changes to Alex.
+- No unsaved verification edit was transmitted to PostgreSQL.
+- The candidate repeated the Phase 5 manual test after the correction and confirmed the complete phase, including the revised unsaved-change workflow.
+- The candidate stopped both manually started development servers before authorizing commit and push.

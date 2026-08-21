@@ -8,7 +8,7 @@ A lightweight collaborative document editing application demonstrating rich-text
 
 ## Current Status
 
-Phase 4 provides the API-backed frontend workspace, seeded-user switching, and separate owned/shared document lists. Rich-text editing and persistence UI are next in the ordered phases defined in `DevelopmentPhases.md`.
+Phase 5 provides document creation, rich-text editing, explicit saving, persisted TipTap JSON, and refresh/reopen behavior. Deployment is next in the ordered phases defined in `DevelopmentPhases.md`.
 
 ## Planned Core Features
 
@@ -18,6 +18,12 @@ Phase 4 provides the API-backed frontend workspace, seeded-user switching, and s
 - Seeded users and simulated identity switching
 - Separate My Documents and Shared With Me views
 - Owner-controlled sharing with backend-enforced access
+
+## Editor Workflow
+
+Select **New Document** to create and open an untitled document. Rename it, add formatted content, and use the explicit **Save** action. The UI distinguishes Unsaved changes, Saving, Saved, and Save failed states. Refresh the browser and reopen the document from My Documents to verify persisted title, content, headings, emphasis, and lists.
+
+The editor currently supports bold, italic, underline, Heading 1, Heading 2, bullet lists, and numbered lists. Navigation warns before discarding unsaved changes.
 
 ## Stack
 

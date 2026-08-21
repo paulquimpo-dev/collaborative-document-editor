@@ -184,6 +184,22 @@ Never clear dirty state until the server confirms success. Guard document or use
 - Preserve user-entered document content after a failed save.
 - Provide a clear retry when recovery is possible.
 
+### Unsaved Changes
+
+- Use an application modal for document, user, and new-document navigation when edits are unsaved.
+- Clearly offer **Keep editing** and **Discard changes**; default focus goes to the safe Keep editing action.
+- Keep the current user/document visibly selected until discard is confirmed.
+- Escape and backdrop interaction cancel navigation and preserve edits.
+- Browser refresh/close may use the browser-native unload warning because custom UI cannot safely replace that lifecycle prompt.
+
+### Unsaved Changes
+
+- Use an application modal for document, user, and new-document navigation when edits are unsaved.
+- Clearly offer **Keep editing** and **Discard changes**; default focus goes to the safe Keep editing action.
+- Keep the current user/document visibly selected until discard is confirmed.
+- Escape and backdrop interaction cancel navigation and preserve edits.
+- Browser refresh/close may use the browser-native unload warning because custom UI cannot safely replace that lifecycle prompt.
+
 ## 6. Accessibility Requirements
 
 - Use semantic landmarks: `aside`, `nav`, `header`, `main`, and appropriately structured headings.
