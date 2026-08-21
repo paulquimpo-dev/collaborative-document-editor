@@ -2,20 +2,21 @@
 
 ## Submission Checklist
 
-- [ ] Source code
+- [x] Source code
 - [x] Live application URL
-- [ ] Seeded/test users
-- [ ] README and setup instructions
-- [ ] Architecture note
+- [x] Seeded/test users
+- [x] README and setup instructions
+- [x] Architecture note
 - [x] AI workflow note established
 - [x] Automated authorization test
 - [ ] 3–5 minute walkthrough video
-- [ ] Screenshots, if included
-- [ ] Known limitations
-- [ ] What would be built with another 2–4 hours
+- [x] Screenshots are optional and not required for the live submission
+- [x] Known limitations
+- [x] What would be built with another 2–4 hours
 
 ## Live Application
 
+- Source: `https://github.com/paulquimpo-dev/collaborative-document-editor`
 - Application: `https://collab-doc-qmpo.vercel.app`
 - API health: `https://collaborative-document-editor-api.onrender.com/api/health/`
 
@@ -28,12 +29,20 @@ Run `python manage.py seed_users` after migrations. The command is idempotent an
 
 ## Walkthrough
 
-To be added after the deployed flow is verified.
+The recording script is ready in `WALKTHROUGH.md`. Add the candidate-recorded 3–5 minute video URL here before final submission.
 
 ## Known Limitations
 
-PostgreSQL is used locally and is provisioned as the production database by the Render Blueprint. Render/Vercel free-tier cold starts may delay the first request after inactivity. Any emergency fallback or additional hosting limitation will be disclosed here if encountered during deployment.
+- Seeded-user switching through `X-User-Id` intentionally replaces production authentication.
+- Shared users collaborate through persisted edits; there is no real-time presence, cursor synchronization, or conflict resolution.
+- Markdown imports remain editable plain text rather than rendered Markdown.
+- Explicit Save is the persistence baseline; autosave and version history are out of scope.
+- The UI is desktop-first, and the TipTap production bundle retains a non-blocking size warning.
+- Render/Vercel free-tier cold starts may delay the first request after inactivity.
 
 ## With Another 2–4 Hours
 
-To be finalized after the required submission is complete. Potential work remains limited to the roadmap in `CDE_MASTER_BLUEPRINT.md`.
+1. Add production authentication and replace the simulated identity header.
+2. Add optimistic concurrency/version checks before considering real-time collaboration.
+3. Add Markdown-to-TipTap conversion, broader frontend component tests, and end-to-end browser coverage.
+4. Improve mobile layout and split the editor bundle after measuring production performance.

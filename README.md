@@ -8,9 +8,9 @@ A lightweight collaborative document editing application demonstrating rich-text
 
 ## Current Status
 
-Phases 7–9 add the complete sharing workflow, persisted `.txt`/`.md` import, owner-only deletion, and integrated validation/error handling. The implementation is ready for local manual confirmation and production redeployment.
+The core assessment product is complete and deployed: rich-text CRUD, persistence, `.txt`/`.md` import, simulated-user switching, owner-controlled sharing, shared editing, and backend-enforced authorization.
 
-## Planned Core Features
+## Core Features
 
 - Create, rename, edit, save, and reopen rich-text documents
 - Bold, italic, underline, heading, bulleted-list, and numbered-list formatting
@@ -37,8 +37,6 @@ Owners can share an open document with another seeded user through the Share dia
 - SQLite only as a documented emergency fallback
 
 ## Local Setup
-
-Detailed setup and demonstration instructions will be completed as implementation and deployment progress.
 
 ### Backend
 
@@ -100,9 +98,11 @@ POST   /api/documents/
 GET    /api/documents/:id/
 PATCH  /api/documents/:id/
 DELETE /api/documents/:id/
+POST   /api/documents/import/
+POST   /api/documents/:id/share/
 ```
 
-The document list returns separate `owned` and `shared` arrays. Owners can read, update, and delete; shared users can read and update; other users receive `404` for inaccessible documents. Sharing and import endpoints are implemented in their later phases.
+The document list returns separate `owned` and `shared` arrays. Owners can read, update, delete, and share; shared users can read and update; other users receive `404` for inaccessible documents. Import accepts browser-generated TipTap JSON plus a `.txt` or `.md` filename. Share rejects invalid users, self-sharing, duplicates, and non-owner attempts.
 
 ## Tests
 
@@ -112,13 +112,15 @@ Run the PostgreSQL-backed backend suite from `backend/`:
 python manage.py test
 ```
 
-The current suite covers persistence defaults, unique shares, idempotent seeding, owner/shared/unshared API access, shared-user updates, and owner-only deletion. Django creates and destroys an isolated PostgreSQL test database automatically.
+The seven-test suite covers persistence defaults, unique shares, idempotent seeding, owner/shared/unshared API access, shared-user updates, owner-only deletion/sharing, duplicate/self-sharing validation, and supported/unsupported imports. Django creates and destroys an isolated PostgreSQL test database automatically.
 
 ### Frontend
 
 ```powershell
 cd frontend
 npm install
+Copy-Item .env.example .env
+# Set VITE_API_BASE_URL=http://127.0.0.1:8000/api
 npm run dev
 ```
 
@@ -169,3 +171,23 @@ Verified production services:
 
 - Frontend: `https://collab-doc-qmpo.vercel.app`
 - API health: `https://collaborative-document-editor-api.onrender.com/api/health/`
+
+## Reviewer Demo Flow
+
+1. Open the live frontend and select Paul.
+2. Create, rename, format, and explicitly save a document; refresh and reopen it.
+3. Import a `.txt` or `.md` file and confirm the imported document is editable.
+4. Share the document with Alex.
+5. Switch to Alex, find it under **Shared With Me**, open it, edit it, and save.
+6. Confirm Alex has no Share/Delete controls; switch to Paul to demonstrate owner deletion.
+
+The timed recording outline is in `WALKTHROUGH.md`.
+
+## Known Limitations
+
+- Identity is deliberately simulated through seeded users and `X-User-Id`; this is not production authentication.
+- Collaboration is shared persistence, not real-time simultaneous editing.
+- Markdown uses the blueprint-approved editable plain-text fallback instead of rendered Markdown conversion.
+- Save is explicit; autosave, conflict resolution, comments, and version history are outside scope.
+- The UI is desktop-first and the TipTap bundle produces a non-blocking size warning.
+- Free hosting can cold-start after inactivity, so the first API request may be slower.

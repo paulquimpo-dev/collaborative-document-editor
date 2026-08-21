@@ -499,3 +499,18 @@ As implementation proceeds, this log will record the actual checks performed, in
 - The candidate selected Render's `render.yaml` through the operating system's **All files** option and correctly identified that the unsupported-file response replaced the workspace with an unrelated “Unable to load” state.
 - Reclassified unsupported/read/API import failures as recoverable action errors.
 - The workspace now remains usable and displays a specific dismissible **File not imported** notification containing the filename and supported `.txt`/`.md` guidance.
+
+### 2026-08-21 — Phase 10: Submission Package
+
+#### AI assistance
+
+- Audited the repository against the blueprint and submission checklist.
+- Replaced planning-era README language with the completed feature/API surface, exact setup, tests, live links, reviewer demo flow, and known limitations.
+- Finalized submission notes with source/live/API links, seeded-user guidance, honest limitations, and prioritized next work.
+- Added a timed 3–5 minute walkthrough script covering the complete definition-of-done flow and engineering decisions.
+- Preserved the candidate-owned recording step rather than claiming an unrecorded video is complete.
+
+#### Human direction and decisions
+
+- Manually confirmed Phases 7–9 and requested final repository preparation, verification, commit, and push.
+- Identified and required correction of recoverable unsupported-file feedback before submission finalization.
