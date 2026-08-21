@@ -8,7 +8,7 @@ A lightweight collaborative document editing application demonstrating rich-text
 
 ## Current Status
 
-Phase 1 persistence and seeded-user foundations are complete and verified against PostgreSQL. API behavior is next in the ordered phases defined in `DevelopmentPhases.md`.
+Phase 2 document CRUD and backend authorization are implemented and verified against PostgreSQL. The permanent authorization API test is next in the ordered phases defined in `DevelopmentPhases.md`.
 
 ## Planned Core Features
 
@@ -61,6 +61,29 @@ Seeded users:
 
 - Paul — `paul@example.com`
 - Alex — `alex@example.com`
+
+## API Identity
+
+Protected document requests require the seeded user's database ID:
+
+```http
+X-User-Id: 1
+```
+
+Retrieve available seeded users from `GET /api/users/`. The user list is intentionally public for the simulated-user prototype.
+
+## Implemented API
+
+```text
+GET    /api/users/
+GET    /api/documents/
+POST   /api/documents/
+GET    /api/documents/:id/
+PATCH  /api/documents/:id/
+DELETE /api/documents/:id/
+```
+
+The document list returns separate `owned` and `shared` arrays. Owners can read, update, and delete; shared users can read and update; other users receive `404` for inaccessible documents. Sharing and import endpoints are implemented in their later phases.
 
 ### Frontend
 

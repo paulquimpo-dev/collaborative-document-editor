@@ -307,3 +307,38 @@ As implementation proceeds, this log will record the actual checks performed, in
 - Removed Django's hardcoded local defaults for secret key, debug mode, allowed hosts, CORS origins, and database URL; all are now required environment values.
 - A source scan found no hardcoded HTTP origins, PostgreSQL URLs, localhost hosts, or loopback addresses in backend/frontend application source outside environment templates.
 - Django checks and all three PostgreSQL tests passed after enforcing required configuration.
+
+### 2026-08-21 — Phase 2: Backend CRUD and Authorization
+
+#### AI assistance
+
+- Re-read the candidate-updated Phase 2 scope, suggested commit message, and repository environment rules before implementation.
+- Added reusable `X-User-Id` resolution with explicit `401` handling for missing, malformed, and unknown users.
+- Implemented user, document-summary, and document-detail serializers.
+- Added practical recursive TipTap JSON validation and trimmed-title validation.
+- Implemented public seeded-user listing and protected document list/create/retrieve/update/delete endpoints.
+- Implemented separate owned/shared list responses, accessible-queryset filtering, shared-user updates, owner-only deletion, and inaccessible-document `404` responses.
+- Added a centralized DRF error handler with stable top-level messages.
+
+#### Human direction and decisions
+
+- Manually confirmed the PostgreSQL-backed Phase 1 behavior before authorizing Phase 2.
+- Retained permanent authorization API tests as the explicitly separate Phase 3 deliverable.
+- Continued to reserve Git commit and push ownership for the candidate after manual confirmation.
+
+#### Verification and iteration
+
+- Django checks and URL reversing confirmed all Phase 2 routes were registered.
+- The first transactional API check exposed DRF's built-in blank-title validation running before the intended clearer message.
+- Adjusted the serializer field so explicit trimming and blank-title validation controls the response; the failed verification transaction rolled back without leaving data.
+- Reran the complete API matrix successfully inside a rolled-back PostgreSQL transaction.
+- Verified public user listing; missing/invalid identity `401`; create/list/retrieve/update/delete; owned/shared grouping; TipTap JSON persistence; title/content validation; shared read/update; shared delete `403`; unshared `404`; and owner deletion.
+- Confirmed the existing three PostgreSQL tests, Django checks, migration consistency, and Python dependency checks still pass.
+- Confirmed backend application source contains no hardcoded service origins, PostgreSQL URLs, localhost hosts, or loopback addresses.
+
+#### Result
+
+- Phase 2 exit checks pass programmatically.
+- The candidate manually tested the Phase 2 API flow and confirmed the expected identity, validation, CRUD, ownership, sharing-access, and unauthorized-access behavior.
+- Phase 2 is manually confirmed and approved for commit and push.
+- Suggested candidate commit: `feat: implement document API and access control`.

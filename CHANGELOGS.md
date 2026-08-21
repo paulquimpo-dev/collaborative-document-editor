@@ -8,6 +8,13 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Added
 
+- Added reusable simulated-user resolution through `X-User-Id` with stable `401` errors.
+- Added serializers for seeded users, document summaries, and document details.
+- Added recursive practical validation for TipTap JSON and trimmed document titles.
+- Added `GET /api/users/` and document list/create/retrieve/update/delete endpoints.
+- Added separate owned/shared document list responses.
+- Added backend-enforced owner/shared access filtering and owner-only deletion.
+- Added centralized API error normalization with `detail` and retained field errors.
 - Added repository-level `AGENTS.md` rules prohibiting hardcoded environment-specific API/service URLs, credentials, secrets, origins, and deployment values.
 - Added requirements for environment-provided API base URLs, relative endpoint composition, clear missing-configuration failures, and synchronized `.env.example` documentation.
 - Added `python-dotenv` and backend-local `.env` loading for Django configuration.
@@ -65,6 +72,12 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Verification
 
+- Passed the complete Phase 2 API behavior matrix in a rolled-back PostgreSQL transaction.
+- Confirmed owners can perform CRUD, shared users can read/update but not delete, and unshared users receive `404`.
+- Confirmed missing and invalid simulated identities return `401`.
+- Confirmed blank titles and malformed TipTap JSON return understandable `400` responses.
+- Confirmed all Phase 2 routes resolve and no model migration changes are pending.
+- Candidate manually confirmed the Phase 2 API behavior and approved the phase for commit and push.
 - Confirmed application source contains no hardcoded HTTP origins, PostgreSQL URLs, localhost hosts, or loopback addresses outside environment templates.
 - Confirmed Django checks and all three PostgreSQL tests pass with required environment-only configuration.
 - Confirmed Django connects to the local `collaborative_document_editor` PostgreSQL database.

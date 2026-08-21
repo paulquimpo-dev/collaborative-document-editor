@@ -35,4 +35,14 @@ This implementation focuses on the smallest coherent collaborative document work
 - Foreign-key cascades remove owned documents and related shares when their parent records are removed.
 - Model ordering keeps users predictable, documents recently updated first, and shares chronological.
 
-API endpoints, frontend responsibilities, deployment configuration, and further verification notes will be expanded as their implementation phases are completed.
+### API Identity and Access
+
+- Protected document endpoints resolve a seeded application user from `X-User-Id` in one reusable identity component.
+- Missing, malformed, and unknown identifiers return `401` with a stable error message.
+- Document querysets include only records owned by or shared with the active simulated user, so inaccessible detail/update/delete operations resolve to `404`.
+- Owners can read, update, and delete documents. Shared users can read and update but receive `403` for deletion.
+- User listing is intentionally public so the frontend can populate the simulated-user switcher.
+- Validation errors use a stable top-level `detail` and retain field-level information in `errors`.
+- TipTap JSON validation checks the root document type, content list, and recursive node structure without introducing editor-schema duplication on the server.
+
+Frontend responsibilities, deployment configuration, and further verification notes will be expanded as their implementation phases are completed.
