@@ -85,6 +85,16 @@ DELETE /api/documents/:id/
 
 The document list returns separate `owned` and `shared` arrays. Owners can read, update, and delete; shared users can read and update; other users receive `404` for inaccessible documents. Sharing and import endpoints are implemented in their later phases.
 
+## Tests
+
+Run the PostgreSQL-backed backend suite from `backend/`:
+
+```powershell
+python manage.py test
+```
+
+The current suite covers persistence defaults, unique shares, idempotent seeding, owner/shared/unshared API access, shared-user updates, and owner-only deletion. Django creates and destroys an isolated PostgreSQL test database automatically.
+
 ### Frontend
 
 ```powershell

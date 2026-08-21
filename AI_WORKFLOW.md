@@ -342,3 +342,31 @@ As implementation proceeds, this log will record the actual checks performed, in
 - The candidate manually tested the Phase 2 API flow and confirmed the expected identity, validation, CRUD, ownership, sharing-access, and unauthorized-access behavior.
 - Phase 2 is manually confirmed and approved for commit and push.
 - Suggested candidate commit: `feat: implement document API and access control`.
+
+### 2026-08-21 — Phase 3: Authorization Test
+
+#### AI assistance
+
+- Re-read the Phase 3 scope and candidate-provided commit message before implementation.
+- Added a permanent DRF API test fixture with an owner, shared user, unshared user, document, and share relationship.
+- Added the highest-value test proving owner access, shared-user access and persisted updates, and `404` isolation for an unshared user.
+- Added focused coverage proving a shared user receives `403` for deletion and the document remains persisted.
+- Kept share creation at the model layer because the owner-facing sharing endpoint is deliberately scheduled for Phase 7.
+
+#### Human direction and decisions
+
+- Manually confirmed Phase 2 and authorized Phase 3 after committing and pushing the verified API implementation.
+- Preserved the narrow testing scope instead of expanding into a large suite that could threaten delivery time.
+
+#### Verification
+
+- Django created and migrated a clean `test_collaborative_document_editor` PostgreSQL database.
+- All two new authorization API tests and three existing persistence tests passed.
+- Django destroyed the isolated PostgreSQL test database after the run.
+- Django system checks, migration consistency, Python dependency checks, repository whitespace checks, and the hardcoded-configuration scan passed.
+
+#### Result
+
+- Phase 3 exit checks pass.
+- Phase 3 awaits candidate confirmation.
+- Suggested candidate commit: `test: add document sharing authorization coverage`.

@@ -8,6 +8,8 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Added
 
+- Added a permanent PostgreSQL-backed authorization API test covering owner access, shared-user access and updates, and unshared-user isolation.
+- Added permanent coverage proving shared users cannot delete owner documents.
 - Added reusable simulated-user resolution through `X-User-Id` with stable `401` errors.
 - Added serializers for seeded users, document summaries, and document details.
 - Added recursive practical validation for TipTap JSON and trimmed document titles.
@@ -72,6 +74,8 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Verification
 
+- Passed five backend tests on a clean PostgreSQL test database, including the two new authorization API tests.
+- Confirmed the shared-user update persists, unshared retrieval/update returns `404`, and shared deletion returns `403` without deleting the document.
 - Passed the complete Phase 2 API behavior matrix in a rolled-back PostgreSQL transaction.
 - Confirmed owners can perform CRUD, shared users can read/update but not delete, and unshared users receive `404`.
 - Confirmed missing and invalid simulated identities return `401`.

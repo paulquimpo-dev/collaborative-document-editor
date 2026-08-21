@@ -8,7 +8,7 @@
 - [ ] README and setup instructions
 - [ ] Architecture note
 - [x] AI workflow note established
-- [ ] Automated authorization test
+- [x] Automated authorization test
 - [ ] 3–5 minute walkthrough video
 - [ ] Screenshots, if included
 - [ ] Known limitations

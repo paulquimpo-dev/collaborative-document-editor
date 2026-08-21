@@ -45,4 +45,10 @@ This implementation focuses on the smallest coherent collaborative document work
 - Validation errors use a stable top-level `detail` and retain field-level information in `errors`.
 - TipTap JSON validation checks the root document type, content list, and recursive node structure without introducing editor-schema duplication on the server.
 
+### Authorization Verification
+
+- Permanent DRF API tests create owner, shared, and unshared users in an isolated PostgreSQL test database.
+- The primary authorization test proves the owner and shared user can retrieve the document, the shared user can persist an update, and an unshared user receives `404` for retrieval and update.
+- A focused owner-only test proves a shared user receives `403` when deleting and that the document remains persisted.
+
 Frontend responsibilities, deployment configuration, and further verification notes will be expanded as their implementation phases are completed.
