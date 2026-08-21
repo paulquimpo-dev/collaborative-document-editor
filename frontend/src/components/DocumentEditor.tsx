@@ -13,6 +13,8 @@ interface DocumentEditorProps {
   onTitleChange: (title: string) => void;
   onContentChange: (content: TipTapNode) => void;
   onSave: () => void;
+  onShare: () => void;
+  onDelete: () => void;
 }
 
 const STATUS_LABELS: Record<SaveStatus, string> = {
@@ -29,6 +31,8 @@ export function DocumentEditor({
   onTitleChange,
   onContentChange,
   onSave,
+  onShare,
+  onDelete,
 }: DocumentEditorProps) {
   const editor = useEditor({
     extensions: [StarterKit, Underline],
@@ -54,6 +58,8 @@ export function DocumentEditor({
         </div>
         <div className="document-save-area">
           <span className={`save-indicator save-${saveStatus}`} aria-live="polite">{STATUS_LABELS[saveStatus]}</span>
+          {document.is_owner && <button type="button" className="button button-secondary" onClick={onShare}>Share</button>}
+          {document.is_owner && <button type="button" className="button button-danger-secondary" onClick={onDelete}>Delete</button>}
           <button type="button" className="button button-primary" disabled={saveStatus === "saving" || saveStatus === "saved"} onClick={onSave}>Save</button>
         </div>
       </div>

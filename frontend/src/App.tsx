@@ -1,13 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   createDocument,
+  deleteDocument,
   getDocument,
   getDocuments,
   getUsers,
+  importDocument,
+  shareDocument,
   updateDocument,
 } from "./api/documents";
 import { AppLayout } from "./components/AppLayout";
 import { DocumentEditor, type SaveStatus } from "./components/DocumentEditor";
+import { DeleteDocumentDialog } from "./components/DeleteDocumentDialog";
+import { ShareDialog } from "./components/ShareDialog";
 import { Sidebar } from "./components/Sidebar";
 import { UserSwitcher } from "./components/UserSwitcher";
 import { UnsavedChangesDialog } from "./components/UnsavedChangesDialog";
@@ -31,6 +36,13 @@ function App() {
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
   const [isLoadingDocument, setIsLoadingDocument] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
+  const [shareError, setShareError] = useState<string | null>(null);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("saved");
   const [error, setError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -147,6 +159,33 @@ function App() {
     runWithUnsavedGuard(() => void createNewDocument());
   }
 
+  async function importSelectedFile(file: File) {
+    if (activeUserId === null) return;
+    const extension = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
+    if (file.name.lastIndexOf(".") < 0 || ![".txt", ".md"].includes(extension)) {
+      setError("Only .txt and .md files are supported.");
+      return;
+    }
+    setIsImporting(true);
+    setError(null);
+    try {
+      const text = await file.text();
+      const imported = await importDocument(activeUserId, file.name, textToTipTap(text));
+      setSelectedDocument(imported);
+      setDocuments((current) => ({ ...current, owned: [toSummary(imported), ...current.owned] }));
+      setSaveStatus("saved");
+      setSaveError(null);
+    } catch (requestError) {
+      setError(errorMessage(requestError, "Unable to import the selected file."));
+    } finally {
+      setIsImporting(false);
+    }
+  }
+
+  function handleImport(file: File) {
+    runWithUnsavedGuard(() => void importSelectedFile(file));
+  }
+
   function handleUserChange(userId: number) {
     if (userId === activeUserId) return;
     runWithUnsavedGuard(() => {
@@ -193,6 +232,47 @@ function App() {
     }
   }
 
+  async function handleShare(targetUserId: number) {
+    if (!selectedDocument || activeUserId === null) return;
+    setIsSharing(true);
+    setShareError(null);
+    try {
+      const shared = await shareDocument(activeUserId, selectedDocument.id, targetUserId);
+      setSelectedDocument(shared);
+      setIsShareOpen(false);
+      setError(null);
+    } catch (requestError) {
+      setShareError(errorMessage(requestError, "Unable to share the document."));
+    } finally {
+      setIsSharing(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!selectedDocument || activeUserId === null) return;
+    setIsDeleting(true);
+    setDeleteError(null);
+    try {
+      await deleteDocument(activeUserId, selectedDocument.id);
+      const deletedId = selectedDocument.id;
+      setDocuments((current) => ({
+        owned: current.owned.filter((item) => item.id !== deletedId),
+        shared: current.shared.filter((item) => item.id !== deletedId),
+      }));
+      setSelectedDocument(null);
+      setSaveStatus("saved");
+      setIsDeleteOpen(false);
+    } catch (requestError) {
+      setDeleteError(errorMessage(requestError, "Unable to delete the document."));
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
+  const eligibleShareUsers = selectedDocument
+    ? users.filter((user) => user.id !== selectedDocument.owner.id && !selectedDocument.shared_users.some((sharedUser) => sharedUser.id === user.id))
+    : [];
+
   return (
     <>
     <AppLayout
@@ -202,8 +282,10 @@ function App() {
           selectedDocumentId={selectedDocument?.id ?? null}
           isLoading={isLoadingDocuments}
           isCreating={isCreating}
+          isImporting={isImporting}
           onNewDocument={handleNewDocument}
           onSelect={handleSelectDocument}
+          onImport={handleImport}
         />
       }
       header={
@@ -232,6 +314,8 @@ function App() {
           onTitleChange={(title) => updateSelectedDocument({ title })}
           onContentChange={(content: TipTapNode) => updateSelectedDocument({ content })}
           onSave={handleSave}
+          onShare={() => { setShareError(null); setIsShareOpen(true); }}
+          onDelete={() => { setDeleteError(null); setIsDeleteOpen(true); }}
         />
       ) : (
         <div className="state-card state-card-empty">
@@ -245,6 +329,12 @@ function App() {
         onCancel={cancelPendingNavigation}
         onDiscard={discardAndContinue}
       />
+    )}
+    {isShareOpen && selectedDocument && (
+      <ShareDialog users={eligibleShareUsers} isSubmitting={isSharing} error={shareError} onCancel={() => setIsShareOpen(false)} onShare={handleShare} />
+    )}
+    {isDeleteOpen && selectedDocument && (
+      <DeleteDocumentDialog title={selectedDocument.title} isDeleting={isDeleting} error={deleteError} onCancel={() => setIsDeleteOpen(false)} onDelete={handleDelete} />
     )}
     </>
   );
@@ -262,6 +352,17 @@ function toSummary(document: DocumentDetail): DocumentSummary {
 function updateSummaryInLists(lists: DocumentLists, document: DocumentDetail): DocumentLists {
   const update = (item: DocumentSummary) => item.id === document.id ? toSummary(document) : item;
   return { owned: lists.owned.map(update), shared: lists.shared.map(update) };
+}
+
+function textToTipTap(text: string): TipTapNode {
+  const lines = text.replace(/\r\n?/g, "\n").split("\n");
+  return {
+    type: "doc",
+    content: lines.map((line) => ({
+      type: "paragraph",
+      ...(line ? { content: [{ type: "text", text: line }] } : {}),
+    })),
+  };
 }
 
 export default App;

@@ -8,6 +8,10 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Added
 
+- Added owner-only document sharing API/UI with eligible-user selection and duplicate/self/non-owner validation.
+- Added persisted `.txt` and `.md` import with browser file reading, editable TipTap conversion, backend extension validation, and immediate opening.
+- Added owner-only frontend document deletion with a confirmation modal and immediate list/editor cleanup, completing frontend CRUD.
+- Added backend tests for successful sharing, duplicate/self/non-owner rejection, supported import, and unsupported extensions.
 - Added an accessible custom unsaved-changes modal with Keep editing and Discard changes actions.
 - Added document detail, create, and update functions to the typed frontend API layer.
 - Added New Document creation with immediate editor opening and owned-list insertion.
@@ -91,6 +95,8 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Verification
 
+- Passed seven PostgreSQL backend tests plus Django checks and migration consistency after Phases 7–9.
+- Passed frontend ESLint, TypeScript compilation, and the Vite production build after sharing, import, and delete integration.
 - Confirmed Keep editing preserves the active user and unsaved content, and Discard changes completes the requested user switch.
 - Confirmed the user switcher remains reusable after either modal action and no discarded title reaches PostgreSQL.
 - Candidate manually confirmed the complete Phase 5 editor and corrected unsaved-change workflow.

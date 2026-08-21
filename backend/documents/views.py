@@ -1,5 +1,6 @@
 from django.db.models import Q
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,6 +9,8 @@ from .identity import SimulatedUserMixin
 from .models import Document, User
 from .serializers import (
     DocumentDetailSerializer,
+    DocumentImportSerializer,
+    DocumentShareSerializer,
     DocumentSummarySerializer,
     UserSerializer,
 )
@@ -72,3 +75,35 @@ class DocumentViewSet(SimulatedUserMixin, viewsets.ModelViewSet):
         self.perform_destroy(document)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=False, methods=["post"], url_path="import")
+    def import_document(self, request):
+        serializer = DocumentImportSerializer(
+            data=request.data,
+            context=self.get_serializer_context(),
+        )
+        serializer.is_valid(raise_exception=True)
+        document = serializer.save()
+        return Response(
+            DocumentDetailSerializer(document, context=self.get_serializer_context()).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+    @action(detail=True, methods=["post"])
+    def share(self, request, pk=None):
+        document = self.get_object()
+        if document.owner_id != self.simulated_user.id:
+            return Response(
+                {"detail": "Only the document owner can share this document."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        serializer = DocumentShareSerializer(
+            data=request.data,
+            context={"document": document, "request": request},
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        document = self.get_queryset().get(pk=document.pk)
+        return Response(
+            DocumentDetailSerializer(document, context=self.get_serializer_context()).data,
+            status=status.HTTP_201_CREATED,
+        )

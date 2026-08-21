@@ -474,3 +474,22 @@ As implementation proceeds, this log will record the actual checks performed, in
 - The generated Vercel production domain differed from the provisional origin, so `CORS_ALLOWED_ORIGINS` was corrected to the exact stable production origin and Render redeployed.
 - The candidate manually confirmed seeded users load and create, rich-text edit, save, refresh, reopen, formatting persistence, and user switching all work in production.
 - Phase 6 exit checks pass with 77 minutes 58 seconds remaining at confirmation.
+
+### 2026-08-21 — Phases 7–9: Sharing, Import, and Integrated Quality
+
+#### AI assistance
+
+- Implemented owner-only sharing through the existing document viewset and added stable validation for missing users, self-sharing, duplicate sharing, and non-owner attempts.
+- Added an owner-only Share dialog populated from seeded users who do not already have access.
+- Implemented `.txt` and `.md` browser reading, filename-derived titles, editable TipTap paragraph conversion, backend extension validation, persisted creation, and immediate opening.
+- Used the blueprint-approved editable plain-text Markdown fallback instead of adding a parser dependency under the timebox.
+- Completed frontend CRUD with an owner-only Delete action, accessible confirmation dialog, backend request, and immediate state reconciliation.
+- Added targeted API coverage for sharing validation and import behavior while retaining the existing access/update/delete authorization tests.
+
+#### Verification
+
+- All seven backend tests pass on a clean PostgreSQL test database.
+- Django system checks and migration consistency checks pass with no model changes required.
+- Frontend ESLint, TypeScript compilation, and the Vite production build pass.
+- The existing non-blocking TipTap bundle-size warning remains accepted; optional code splitting is deferred.
+- Manual confirmation is required before commit/push and production redeployment.

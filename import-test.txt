@@ -1,0 +1,3 @@
+Imported TXT
+This content came from a text file.
+It should remain editable.

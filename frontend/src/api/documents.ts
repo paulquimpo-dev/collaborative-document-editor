@@ -37,3 +37,25 @@ export function updateDocument(
     body: JSON.stringify(values),
   });
 }
+
+export function shareDocument(userId: number, documentId: number, targetUserId: number): Promise<DocumentDetail> {
+  return apiRequest<DocumentDetail>(`/documents/${documentId}/share/`, {
+    userId,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id: targetUserId }),
+  });
+}
+
+export function importDocument(userId: number, filename: string, content: TipTapNode): Promise<DocumentDetail> {
+  return apiRequest<DocumentDetail>("/documents/import/", {
+    userId,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ filename, content }),
+  });
+}
+
+export function deleteDocument(userId: number, documentId: number): Promise<void> {
+  return apiRequest<void>(`/documents/${documentId}/`, { userId, method: "DELETE" });
+}

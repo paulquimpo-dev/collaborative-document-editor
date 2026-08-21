@@ -122,3 +122,50 @@ class DocumentAuthorizationAPITests(APITestCase):
             "Only the document owner can delete this document.",
         )
         self.assertTrue(Document.objects.filter(pk=self.document.id).exists())
+
+    def test_owner_can_share_and_invalid_shares_are_rejected(self):
+        target = User.objects.create(name="Taylor", email="taylor@example.com")
+        share_url = reverse("document-share", args=[self.document.id])
+
+        created = self.client.post(
+            share_url, {"user_id": target.id}, format="json", **self.user_headers(self.owner)
+        )
+        self.assertEqual(created.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(DocumentShare.objects.filter(document=self.document, user=target).exists())
+
+        duplicate = self.client.post(
+            share_url, {"user_id": target.id}, format="json", **self.user_headers(self.owner)
+        )
+        self.assertEqual(duplicate.status_code, status.HTTP_400_BAD_REQUEST)
+
+        self_share = self.client.post(
+            share_url, {"user_id": self.owner.id}, format="json", **self.user_headers(self.owner)
+        )
+        self.assertEqual(self_share.status_code, status.HTTP_400_BAD_REQUEST)
+
+        non_owner = self.client.post(
+            share_url, {"user_id": target.id}, format="json", **self.user_headers(self.shared_user)
+        )
+        self.assertEqual(non_owner.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_supported_import_creates_document_and_unsupported_extension_fails(self):
+        import_url = reverse("document-import-document")
+        content = {"type": "doc", "content": [{"type": "paragraph", "content": [{"type": "text", "text": "Imported"}]}]}
+
+        created = self.client.post(
+            import_url,
+            {"filename": "meeting-notes.md", "content": content},
+            format="json",
+            **self.user_headers(self.owner),
+        )
+        self.assertEqual(created.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(created.data["title"], "meeting-notes")
+        self.assertEqual(created.data["content"], content)
+
+        rejected = self.client.post(
+            import_url,
+            {"filename": "notes.pdf", "content": content},
+            format="json",
+            **self.user_headers(self.owner),
+        )
+        self.assertEqual(rejected.status_code, status.HTTP_400_BAD_REQUEST)

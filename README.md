@@ -8,7 +8,7 @@ A lightweight collaborative document editing application demonstrating rich-text
 
 ## Current Status
 
-Phase 6 is complete: the Render Django API, managed PostgreSQL database, and Vercel frontend are live, and the production create/edit/save/refresh/reopen flow has been verified.
+Phases 7–9 add the complete sharing workflow, persisted `.txt`/`.md` import, owner-only deletion, and integrated validation/error handling. The implementation is ready for local manual confirmation and production redeployment.
 
 ## Planned Core Features
 
@@ -24,6 +24,10 @@ Phase 6 is complete: the Render Django API, managed PostgreSQL database, and Ver
 Select **New Document** to create and open an untitled document. Rename it, add formatted content, and use the explicit **Save** action. The UI distinguishes Unsaved changes, Saving, Saved, and Save failed states. Refresh the browser and reopen the document from My Documents to verify persisted title, content, headings, emphasis, and lists.
 
 The editor currently supports bold, italic, underline, Heading 1, Heading 2, bullet lists, and numbered lists. Navigation warns before discarding unsaved changes.
+
+Owners can share an open document with another seeded user through the Share dialog. The recipient finds it under **Shared With Me** and can edit/save it, but cannot share or delete it. Owners can permanently delete documents through a confirmation dialog.
+
+**Import File** accepts `.txt` and `.md`, uses the filename as the document title, and immediately opens the persisted editable document. To protect the timebox, both formats are converted into editable paragraphs; Markdown syntax remains plain editable text rather than adding a custom parser.
 
 ## Stack
 

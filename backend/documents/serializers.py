@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from .models import Document, User
+from pathlib import Path
+
+from .models import Document, DocumentShare, User
 
 
 def validate_tiptap_node(node, path="content"):
@@ -95,3 +97,51 @@ class DocumentDetailSerializer(serializers.ModelSerializer):
         for index, node in enumerate(nodes):
             validate_tiptap_node(node, f"content[{index}]")
         return value
+
+
+class DocumentImportSerializer(serializers.Serializer):
+    filename = serializers.CharField(max_length=255)
+    content = serializers.JSONField()
+
+    def validate_filename(self, value):
+        safe_name = Path(value).name
+        extension = Path(safe_name).suffix.lower()
+        if extension not in {".txt", ".md"}:
+            raise serializers.ValidationError("Only .txt and .md files are supported.")
+        title = Path(safe_name).stem.strip()
+        if not title:
+            raise serializers.ValidationError("The imported file must have a name.")
+        self.title = title[:255]
+        return safe_name
+
+    def validate_content(self, value):
+        return DocumentDetailSerializer().validate_content(value)
+
+    def create(self, validated_data):
+        return Document.objects.create(
+            owner=self.context["request"].simulated_user,
+            title=self.title,
+            content=validated_data["content"],
+        )
+
+
+class DocumentShareSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+
+    def validate_user_id(self, value):
+        document = self.context["document"]
+        try:
+            user = User.objects.get(pk=value)
+        except User.DoesNotExist as exc:
+            raise serializers.ValidationError("The selected user does not exist.") from exc
+        if user.id == document.owner_id:
+            raise serializers.ValidationError("A document cannot be shared with its owner.")
+        if document.shares.filter(user=user).exists():
+            raise serializers.ValidationError("This document is already shared with that user.")
+        return value
+
+    def create(self, validated_data):
+        return DocumentShare.objects.create(
+            document=self.context["document"],
+            user_id=validated_data["user_id"],
+        )

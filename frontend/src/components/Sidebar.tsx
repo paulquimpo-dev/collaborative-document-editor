@@ -6,8 +6,10 @@ interface SidebarProps {
   selectedDocumentId: number | null;
   isLoading: boolean;
   isCreating: boolean;
+  isImporting: boolean;
   onNewDocument: () => void;
   onSelect: (document: DocumentSummary) => void;
+  onImport: (file: File) => void;
 }
 
 export function Sidebar({
@@ -15,8 +17,10 @@ export function Sidebar({
   selectedDocumentId,
   isLoading,
   isCreating,
+  isImporting,
   onNewDocument,
   onSelect,
+  onImport,
 }: SidebarProps) {
   return (
     <aside className="sidebar">
@@ -32,9 +36,19 @@ export function Sidebar({
         <button type="button" className="button button-primary button-full" disabled={isCreating} onClick={onNewDocument}>
           <span aria-hidden="true">＋</span> {isCreating ? "Creating…" : "New Document"}
         </button>
-        <button type="button" className="button button-secondary button-full" disabled title="File import is not available in this build">
-          <span aria-hidden="true">↑</span> Import File
-        </button>
+        <label className={`button button-secondary button-full file-button${isImporting ? " is-disabled" : ""}`}>
+          <span aria-hidden="true">↑</span> {isImporting ? "Importing…" : "Import File"}
+          <input
+            type="file"
+            accept=".txt,.md,text/plain,text/markdown"
+            disabled={isImporting}
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              if (file) onImport(file);
+              event.target.value = "";
+            }}
+          />
+        </label>
         <p className="format-hint">Supports .txt and .md</p>
       </div>
 

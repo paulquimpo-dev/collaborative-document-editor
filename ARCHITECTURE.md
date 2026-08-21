@@ -69,6 +69,14 @@ This implementation focuses on the smallest coherent collaborative document work
 - Save status is explicit and accessible: Unsaved changes, Saving, Saved, or Save failed with retained content and retry.
 - Browser unload, document switching, user switching, and new-document creation guard unsaved changes.
 
+### Sharing, Import, and Deletion
+
+- The owner-only share action validates the target user, blocks self-sharing and duplicates, and returns refreshed document details.
+- The frontend derives eligible targets from seeded users and current shares; backend authorization remains authoritative.
+- TXT and Markdown files are read in the browser, converted to editable TipTap paragraphs, and sent as JSON with the filename. The backend independently validates the extension and derives the title without storing the source file.
+- Markdown intentionally uses the documented editable-plain-text fallback to avoid a parsing dependency during the assessment.
+- Delete is exposed only for owned documents, confirmed in an application modal, enforced owner-only by the backend, and immediately reconciled in the sidebar/editor state.
+
 ### Production Topology
 
 - Vercel builds and serves the `frontend/` Vite application as static assets.
