@@ -14,6 +14,18 @@
 - [x] Known limitations
 - [x] What would be built with another 2–4 hours
 
+## Included Deliverables
+
+The Google Drive submission folder should contain exactly:
+
+- The complete `Collaborative Document Editor` source repository
+- `README.md` — local setup, run, test, production, and reviewer instructions
+- `ARCHITECTURE.md` — short architecture note and scope decisions
+- `AI_WORKFLOW.md` — AI-native development workflow and human decision log
+- `SUBMISSION.md` — this deliverables manifest, links, accounts, and limitations
+- `WALKTHROUGH_VIDEO_URL.txt` — unlisted Loom or YouTube walkthrough URL
+- Optional screenshots only if they materially help reviewers; the live product requires no extra setup
+
 ## Live Application
 
 - Source: `https://github.com/paulquimpo-dev/collaborative-document-editor`
@@ -29,7 +41,16 @@ Run `python manage.py seed_users` after migrations. The command is idempotent an
 
 ## Walkthrough
 
-The recording script is ready in `WALKTHROUGH.md`. Add the candidate-recorded 3–5 minute video URL here before final submission.
+The recording script is ready in `WALKTHROUGH.md` and covers the main flow, end-to-end behavior, deliberate deprioritization, implementation decisions, and AI support. Replace the placeholder in `WALKTHROUGH_VIDEO_URL.txt` after uploading the candidate-recorded video.
+
+## Reviewer Access
+
+No password or production credential is required. Use the top-right simulated user switcher:
+
+- Paul — `paul@example.com` — create/own/share/delete demonstration
+- Alex — `alex@example.com` — Shared With Me/edit demonstration
+
+The live deployment can be tested directly without local setup.
 
 ## Known Limitations
 

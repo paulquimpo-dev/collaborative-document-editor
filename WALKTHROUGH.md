@@ -36,9 +36,11 @@ Target length: 3–5 minutes.
 - Mention structured TipTap JSON persistence, owner/shared queryset filtering, PostgreSQL constraints, and automated authorization tests.
 - Briefly show the seven passing backend tests if useful.
 
-## 3:40–4:10 — Scope and Close
+## 3:40–4:15 — Scope, AI Workflow, and Close
 
 - Mention explicit Save, plain-editable Markdown fallback, desktop-first UI, and free-tier cold starts as deliberate limitations.
+- Explain that AI helped translate the blueprint into phased requirements, implement bounded changes, run tests, diagnose the user-switch/import feedback defects, maintain documentation, and prepare deployment configuration.
+- Emphasize that the candidate directed scope and stack choices, manually verified every phase, supplied environment credentials privately, made the PostgreSQL and UX decisions, and approved commits/deployments.
 - Close with the live application, repository, architecture note, AI workflow log, and deployment configuration.
 
 Before recording, create one short import fixture and remove unrelated test documents so the sidebar is easy to follow.

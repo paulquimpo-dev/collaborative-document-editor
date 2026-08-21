@@ -514,3 +514,5 @@ As implementation proceeds, this log will record the actual checks performed, in
 
 - Manually confirmed Phases 7–9 and requested final repository preparation, verification, commit, and push.
 - Identified and required correction of recoverable unsupported-file feedback before submission finalization.
+- Supplied the final assessment deliverables format and required the repository package to mirror it exactly.
+- The candidate retains ownership of recording/uploading the walkthrough and assembling the final Google Drive folder.

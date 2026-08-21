@@ -13,6 +13,7 @@ This file tracks meaningful project changes made during the assessment. Entries 
 - Added owner-only frontend document deletion with a confirmation modal and immediate list/editor cleanup, completing frontend CRUD.
 - Added backend tests for successful sharing, duplicate/self/non-owner rejection, supported import, and unsupported extensions.
 - Added final reviewer setup/demo documentation and a timed 3–5 minute walkthrough script.
+- Aligned the final deliverables manifest with the assessment format and added the required walkthrough-video URL text file.
 - Added an accessible custom unsaved-changes modal with Keep editing and Discard changes actions.
 - Added document detail, create, and update functions to the typed frontend API layer.
 - Added New Document creation with immediate editor opening and owned-list insertion.
