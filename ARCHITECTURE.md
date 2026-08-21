@@ -1,0 +1,33 @@
+# Collaborative Document Editor
+
+## Architecture
+
+This implementation focuses on the smallest coherent collaborative document workflow that can be delivered reliably within the assessment timebox: rich-text document creation and editing, persistence, text/Markdown import, document ownership, sharing between simulated users, and backend-enforced access control.
+
+## System Shape
+
+- A React and TypeScript single-page frontend provides the document workspace and TipTap editor.
+- A Django REST Framework backend owns persistence, validation, sharing rules, and authorization.
+- The frontend communicates with the backend through a small JSON REST API.
+- A seeded user identifier is sent with requests through `X-User-Id` to simulate identity without implementing production authentication.
+- SQLite supports fast local development; PostgreSQL is preferred for hosted persistence.
+
+## Deliberate Scope Decisions
+
+- Explicit Save is the reliable baseline; autosave is optional after completion.
+- Shared users can read and update; only owners can share or delete.
+- Imported source files are read in the browser and are not stored by the backend.
+- TipTap JSON preserves rich-text structure across refresh and reopen.
+- Real-time collaboration, production authentication, comments, version history, DOCX, and advanced permissions are deferred.
+
+## Detailed Design
+
+### Persistence Model
+
+- `User` stores only a seeded user's name and unique email. It is deliberately separate from production authentication.
+- `Document` stores a required title, structured TipTap JSON content, its owner, and creation/update timestamps.
+- `DocumentShare` joins a document to a seeded user and enforces one share per document/user pair at the database level.
+- Foreign-key cascades remove owned documents and related shares when their parent records are removed.
+- Model ordering keeps users predictable, documents recently updated first, and shares chronological.
+
+API endpoints, frontend responsibilities, deployment configuration, and further verification notes will be expanded as their implementation phases are completed.
