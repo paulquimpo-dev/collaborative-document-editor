@@ -9,7 +9,7 @@
 - [x] Architecture note
 - [x] AI workflow note established
 - [x] Automated authorization test
-- [ ] 3–5 minute walkthrough video
+- [x] 3–5 minute walkthrough video
 - [x] Screenshots are optional and not required for the live submission
 - [x] Known limitations
 - [x] What would be built with another 2–4 hours
@@ -41,7 +41,7 @@ Run `python manage.py seed_users` after migrations. The command is idempotent an
 
 ## Walkthrough
 
-The candidate-recorded 3–5 minute walkthrough covers the main flow, end-to-end behavior, deliberate deprioritization, implementation decisions, and AI support. Replace the placeholder in `WALKTHROUGH_VIDEO_URL.txt` after uploading the unlisted Loom or YouTube video.
+[Watch the 3–5 minute walkthrough](https://youtu.be/dC40CIHJI3M). The video covers the main flow, end-to-end behavior, deliberate deprioritization, implementation decisions, and AI support. The same URL is provided in `WALKTHROUGH_VIDEO_URL.txt` as required.
 
 ## Reviewer Access
 

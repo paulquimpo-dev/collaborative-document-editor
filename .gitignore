@@ -17,3 +17,6 @@ frontend/.env
 .idea/
 .DS_Store
 Thumbs.db
+
+# Local submission packages
+*.zip
