@@ -41,7 +41,7 @@ Run `python manage.py seed_users` after migrations. The command is idempotent an
 
 ## Walkthrough
 
-The recording script is ready in `WALKTHROUGH.md` and covers the main flow, end-to-end behavior, deliberate deprioritization, implementation decisions, and AI support. Replace the placeholder in `WALKTHROUGH_VIDEO_URL.txt` after uploading the candidate-recorded video.
+The candidate-recorded 3–5 minute walkthrough covers the main flow, end-to-end behavior, deliberate deprioritization, implementation decisions, and AI support. Replace the placeholder in `WALKTHROUGH_VIDEO_URL.txt` after uploading the unlisted Loom or YouTube video.
 
 ## Reviewer Access
 

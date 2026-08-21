@@ -181,8 +181,6 @@ Verified production services:
 5. Switch to Alex, find it under **Shared With Me**, open it, edit it, and save.
 6. Confirm Alex has no Share/Delete controls; switch to Paul to demonstrate owner deletion.
 
-The timed recording outline is in `WALKTHROUGH.md`.
-
 ## Known Limitations
 
 - Identity is deliberately simulated through seeded users and `X-User-Id`; this is not production authentication.

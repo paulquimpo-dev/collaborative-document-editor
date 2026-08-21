@@ -507,7 +507,7 @@ As implementation proceeds, this log will record the actual checks performed, in
 - Audited the repository against the blueprint and submission checklist.
 - Replaced planning-era README language with the completed feature/API surface, exact setup, tests, live links, reviewer demo flow, and known limitations.
 - Finalized submission notes with source/live/API links, seeded-user guidance, honest limitations, and prioritized next work.
-- Added a timed 3–5 minute walkthrough script covering the complete definition-of-done flow and engineering decisions.
+- Prepared the required walkthrough coverage plan for the candidate without including recording notes in the submitted repository.
 - Preserved the candidate-owned recording step rather than claiming an unrecorded video is complete.
 
 #### Human direction and decisions
