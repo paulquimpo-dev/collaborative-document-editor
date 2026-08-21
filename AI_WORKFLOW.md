@@ -493,3 +493,9 @@ As implementation proceeds, this log will record the actual checks performed, in
 - Frontend ESLint, TypeScript compilation, and the Vite production build pass.
 - The existing non-blocking TipTap bundle-size warning remains accepted; optional code splitting is deferred.
 - Manual confirmation is required before commit/push and production redeployment.
+
+#### Manual-test correction
+
+- The candidate selected Render's `render.yaml` through the operating system's **All files** option and correctly identified that the unsupported-file response replaced the workspace with an unrelated “Unable to load” state.
+- Reclassified unsupported/read/API import failures as recoverable action errors.
+- The workspace now remains usable and displays a specific dismissible **File not imported** notification containing the filename and supported `.txt`/`.md` guidance.

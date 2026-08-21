@@ -68,6 +68,7 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Changed
 
+- Changed unsupported import feedback from a workspace-blocking load error to a specific dismissible notification that preserves the current workspace and document.
 - Added Render Blueprint configuration for the Django API and managed PostgreSQL deployment.
 - Added WhiteNoise production static-file handling and documented the Render/Vercel deployment and smoke-test workflow.
 - Documented that deployment-generated hosts, origins, database credentials, and secrets remain environment-provided rather than hardcoded.

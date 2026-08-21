@@ -37,6 +37,7 @@ function App() {
   const [isLoadingDocument, setIsLoadingDocument] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [shareError, setShareError] = useState<string | null>(null);
@@ -163,11 +164,11 @@ function App() {
     if (activeUserId === null) return;
     const extension = file.name.slice(file.name.lastIndexOf(".")).toLowerCase();
     if (file.name.lastIndexOf(".") < 0 || ![".txt", ".md"].includes(extension)) {
-      setError("Only .txt and .md files are supported.");
+      setImportError(`“${file.name}” is not supported. Choose a .txt or .md file.`);
       return;
     }
     setIsImporting(true);
-    setError(null);
+    setImportError(null);
     try {
       const text = await file.text();
       const imported = await importDocument(activeUserId, file.name, textToTipTap(text));
@@ -176,7 +177,7 @@ function App() {
       setSaveStatus("saved");
       setSaveError(null);
     } catch (requestError) {
-      setError(errorMessage(requestError, "Unable to import the selected file."));
+      setImportError(errorMessage(requestError, "The selected file could not be imported. Try another .txt or .md file."));
     } finally {
       setIsImporting(false);
     }
@@ -335,6 +336,16 @@ function App() {
     )}
     {isDeleteOpen && selectedDocument && (
       <DeleteDocumentDialog title={selectedDocument.title} isDeleting={isDeleting} error={deleteError} onCancel={() => setIsDeleteOpen(false)} onDelete={handleDelete} />
+    )}
+    {importError && (
+      <div className="action-notification action-notification-error" role="alert">
+        <span className="state-icon" aria-hidden="true">!</span>
+        <div className="action-notification-copy">
+          <strong>File not imported</strong>
+          <p>{importError}</p>
+        </div>
+        <button type="button" className="notification-close" aria-label="Dismiss import error" onClick={() => setImportError(null)}>×</button>
+      </div>
     )}
     </>
   );
