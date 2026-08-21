@@ -8,6 +8,11 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Added
 
+- Added repository-level `AGENTS.md` rules prohibiting hardcoded environment-specific API/service URLs, credentials, secrets, origins, and deployment values.
+- Added requirements for environment-provided API base URLs, relative endpoint composition, clear missing-configuration failures, and synchronized `.env.example` documentation.
+- Added `python-dotenv` and backend-local `.env` loading for Django configuration.
+- Added a PostgreSQL `DATABASE_URL` template with an explicit URL-encoded password placeholder.
+- Added a frontend environment warning that browser-visible configuration must not contain backend secrets.
 - Added the Phase 1 User, Document, and DocumentShare persistence models.
 - Added structured TipTap JSON as the callable default for new document content.
 - Added document ownership relationships and document-share relationships with cascade cleanup.
@@ -38,6 +43,12 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Changed
 
+- Removed hardcoded Django configuration defaults; secret key, debug mode, allowed hosts, CORS origins, and database URL are now required environment values.
+- Made `DATABASE_URL` mandatory so Django cannot silently fall back to SQLite when PostgreSQL configuration is missing.
+- Changed the persistence decision from SQLite-first local development to PostgreSQL for both local development and deployment.
+- Reclassified SQLite as an emergency fallback that must be explicitly documented if used.
+- Updated Phase 1 to require ignored `.env` loading, a local PostgreSQL connection, and PostgreSQL-backed migration/seeding verification before Phase 2.
+- Updated setup, architecture, submission, and workflow documentation to reflect the PostgreSQL decision.
 - Updated `CDE_MASTER_BLUEPRINT.md` to make explicit Save the required baseline and leave autosave optional.
 - Clarified that the project uses small application-level seeded users rather than production authentication.
 - Clarified owner and shared-user permissions.
@@ -54,6 +65,13 @@ This file tracks meaningful project changes made during the assessment. Entries 
 
 ### Verification
 
+- Confirmed application source contains no hardcoded HTTP origins, PostgreSQL URLs, localhost hosts, or loopback addresses outside environment templates.
+- Confirmed Django checks and all three PostgreSQL tests pass with required environment-only configuration.
+- Confirmed Django connects to the local `collaborative_document_editor` PostgreSQL database.
+- Applied all migrations and repeated seeded-user creation successfully on PostgreSQL.
+- Confirmed TipTap JSON document persistence on PostgreSQL.
+- Confirmed Django can create, migrate, test, and destroy a clean PostgreSQL test database.
+- Passed all three Phase 1 tests using PostgreSQL.
 - Confirmed a clean Django test database can apply all migrations.
 - Confirmed running `seed_users` repeatedly leaves exactly two seeded users.
 - Confirmed empty TipTap JSON content can be stored without sharing mutable defaults between documents.

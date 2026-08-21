@@ -236,3 +236,10 @@ Do not spend assessment time on:
 ## 10. UI Completion Threshold
 
 The UI is complete enough when a reviewer can immediately identify the active user, create or import a document, distinguish owned from shared documents, edit and format content, understand whether changes are saved, share as the owner, and recover from common errors. Once these behaviors are clear, accessible, consistent, and credible, stop polishing and return effort to functionality, deployment, testing, and submission readiness.
+
+## 11. Frontend Environment Rule
+
+- Obtain the API base URL from `VITE_API_BASE_URL`; never hardcode local or deployed API origins in components or API clients.
+- Compose the base URL with relative endpoint paths defined by the REST contract.
+- Fail with a clear startup/configuration message when the API base URL is missing.
+- Treat all `VITE_*` values as public browser data and never place credentials or secrets in them.

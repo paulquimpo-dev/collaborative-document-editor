@@ -2,15 +2,26 @@ import os
 from pathlib import Path
 
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "local-development-only")
-DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
+
+def required_env(name: str) -> str:
+    value = os.getenv(name)
+    if not value:
+        raise ImproperlyConfigured(f"{name} is required in the environment.")
+    return value
+
+
+SECRET_KEY = required_env("DJANGO_SECRET_KEY")
+DEBUG = required_env("DJANGO_DEBUG").lower() == "true"
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    for host in required_env("DJANGO_ALLOWED_HOSTS").split(",")
     if host.strip()
 ]
 
@@ -56,10 +67,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+DATABASE_URL = required_env("DATABASE_URL")
 DATABASES = {
-    "default": dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+    "default": dj_database_url.parse(
+        DATABASE_URL,
         conn_max_age=600,
+        conn_health_checks=True,
     )
 }
 
@@ -76,7 +89,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = [
     origin.strip()
-    for origin in os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+    for origin in required_env("CORS_ALLOWED_ORIGINS").split(",")
     if origin.strip()
 ]
 
@@ -84,4 +97,3 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
 }
-

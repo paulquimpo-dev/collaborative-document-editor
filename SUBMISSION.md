@@ -31,7 +31,7 @@ To be added after the deployed flow is verified.
 
 ## Known Limitations
 
-To be completed honestly as implementation and deployment decisions are finalized.
+PostgreSQL is the required primary database. Any emergency SQLite fallback will be disclosed here if PostgreSQL becomes a confirmed delivery blocker.
 
 ## With Another 2–4 Hours
 

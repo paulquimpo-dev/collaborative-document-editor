@@ -35,9 +35,21 @@ The submission must use the name **Collaborative Document Editor**. Real-time co
 
 ### Persistence
 
-- SQLite is acceptable for local development.
-- PostgreSQL is preferred for deployment because hosted SQLite files may be ephemeral.
-- Database configuration must use environment variables in deployment.
+- PostgreSQL is the primary database for local development and deployment.
+- Local credentials must be stored in an ignored `backend/.env` file and loaded through `DATABASE_URL`.
+- Deployment credentials must be provided by the hosting platform through `DATABASE_URL`.
+- SQLite is an emergency fallback only if PostgreSQL becomes a confirmed blocker that threatens completion; any fallback must be documented.
+
+### Environment configuration
+
+- No API base URL, service origin, database URL, credential, secret, deployment host, or environment-specific infrastructure value may be hardcoded in application code.
+- Backend local configuration comes from ignored `backend/.env`; hosted configuration comes from deployment-platform environment variables.
+- Frontend local configuration comes from ignored `frontend/.env`; hosted browser-safe configuration comes from deployment-platform `VITE_*` variables.
+- Frontend requests combine `VITE_API_BASE_URL` with relative API contract paths.
+- Relative paths such as `/documents/` may remain code constants and are not environment-specific URLs.
+- Frontend environment variables must never contain secrets.
+- Required values must fail with understandable configuration errors when missing.
+- Every configuration addition must update the relevant `.env.example`, README, and deployment notes.
 
 ## 3. Data Requirements
 
@@ -224,6 +236,7 @@ User-facing API failures should use a stable shape:
 - Do not overwrite one document with another document's content during switching.
 - Do not carry one user's selected inaccessible document into another user's session.
 - API base URLs, allowed hosts, CORS origins, database credentials, and debug mode must be environment-configurable.
+- Automated review or repository search must confirm no environment-specific API/service URLs or secrets were introduced into source code.
 
 ## 8. Testing Requirements
 
@@ -240,7 +253,7 @@ Manual verification must cover the full definition-of-done flow, formatting pers
 ## 9. Deployment and Documentation Requirements
 
 - Deploy early after create/edit/save/reopen works end to end.
-- Use PostgreSQL in production unless setup threatens completion.
+- Use PostgreSQL locally and in production; use SQLite only as a documented emergency fallback.
 - Run migrations and the idempotent seed command in deployment.
 - Verify the frontend's production API URL, CORS origin, and `X-User-Id` header.
 - Complete `README.md`, `ARCHITECTURE.md`, `AI_WORKFLOW.md`, and `SUBMISSION.md`.

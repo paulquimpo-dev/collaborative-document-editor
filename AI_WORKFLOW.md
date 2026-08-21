@@ -15,6 +15,7 @@ This log documents how AI is used during the assessment, which decisions remain 
 - Each development phase is implemented and verified as a gated unit.
 - The candidate reviews the reported phase results, then owns the commit and push after confirming success.
 - The AI coding agent does not commit or push unless explicitly instructed.
+- Environment-specific API/service URLs, credentials, secrets, origins, and deployment values must never be hardcoded.
 
 ## Repository Workflow
 
@@ -237,5 +238,72 @@ As implementation proceeds, this log will record the actual checks performed, in
 - Phase 1 exit checks passed.
 - The candidate manually repeated the Phase 1 verification process and confirmed that every expected output was shown.
 - Manual confirmation covered migrations, idempotent seeding, document persistence, TipTap JSON content, share persistence, duplicate-share rejection, and the automated test suite.
-- Persistence and seeded identity foundations are ready for Phase 2 API implementation.
+- The candidate subsequently clarified that PostgreSQL is preferred for local development as well as deployment.
+- Phase 1 therefore requires a PostgreSQL configuration and verification amendment before Phase 2 begins.
 - Suggested candidate commit: `feat: add document persistence and seeded users`.
+
+### 2026-08-21 — PostgreSQL Decision Alignment
+
+#### AI assistance
+
+- Inspected the local environment and confirmed PostgreSQL 18 and its Windows service are installed and running.
+- Confirmed the server requires password authentication for the local `postgres` role.
+- Identified that Django already supports `DATABASE_URL` and has the PostgreSQL driver installed, but does not yet load a local `.env` file.
+- Updated the blueprint, technical requirements, development phases, setup documentation, architecture, submission notes, workflow log, and changelog to make PostgreSQL the primary local and deployed database.
+
+#### Human direction and decisions
+
+- Selected PostgreSQL over SQLite as the preferred database for both local development and deployment.
+- Required the planning documents to reflect this decision before Phase 2.
+- Retained SQLite only as an emergency, explicitly documented fallback.
+
+#### Credential boundary
+
+- Local PostgreSQL authentication requires credentials. The candidate will place the connection string in ignored `backend/.env` rather than exposing credentials in source control or chat.
+- Credentials were supplied through the ignored file and were validated without printing them.
+
+#### Environment-loading implementation
+
+- Added `python-dotenv` as the single environment-file dependency.
+- Django now loads only `backend/.env` before reading configuration.
+- Updated `backend/.env.example` with the PostgreSQL `DATABASE_URL` shape and URL-encoding guidance.
+- Clarified that `frontend/.env` is browser-visible and must never contain database credentials or Django secrets.
+- Removed the silent SQLite default after PostgreSQL was connected. `DATABASE_URL` is now required; an emergency fallback must be selected explicitly.
+
+#### PostgreSQL verification
+
+- Created the local `collaborative_document_editor` PostgreSQL database.
+- Applied all Django and documents migrations successfully.
+- Ran `seed_users` twice and confirmed exactly two users remain.
+- Confirmed Django reports the `postgresql` vendor and the intended database name.
+- Created, retrieved, and removed a temporary document to prove TipTap JSON persistence on PostgreSQL.
+- Created and destroyed a clean PostgreSQL test database through Django's test runner.
+- Passed all three Phase 1 persistence tests against PostgreSQL.
+- Confirmed no pending model migrations, Django system issues, or broken Python dependencies.
+
+#### Result
+
+- The PostgreSQL Phase 1 amendment is complete.
+- Phase 1 is ready for final candidate confirmation before Phase 2.
+
+### 2026-08-21 — Environment Configuration Guardrail
+
+#### Human direction and decisions
+
+- Required a project-wide rule prohibiting hardcoded APIs and environment-specific infrastructure values before deeper implementation begins.
+- Required all such values to come from environment variables.
+
+#### AI assistance
+
+- Added repository-level `AGENTS.md` instructions so future implementation work is governed by the rule.
+- Clarified that API origins/base URLs are environment-provided while relative endpoint paths remain code-level REST contract constants.
+- Propagated the rule into the blueprint, technical requirements, development phases, README, architecture, and UI/UX guide.
+- Required clear missing-configuration failures, secret isolation, tracked `.env.example` templates, and documentation updates whenever variables are added.
+
+#### Result
+
+- Future frontend API clients will require `VITE_API_BASE_URL` and compose it with relative paths.
+- Backend URLs, hosts, origins, credentials, secrets, and database configuration remain environment-driven.
+- Removed Django's hardcoded local defaults for secret key, debug mode, allowed hosts, CORS origins, and database URL; all are now required environment values.
+- A source scan found no hardcoded HTTP origins, PostgreSQL URLs, localhost hosts, or loopback addresses in backend/frontend application source outside environment templates.
+- Django checks and all three PostgreSQL tests passed after enforcing required configuration.

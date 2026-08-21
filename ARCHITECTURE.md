@@ -10,7 +10,12 @@ This implementation focuses on the smallest coherent collaborative document work
 - A Django REST Framework backend owns persistence, validation, sharing rules, and authorization.
 - The frontend communicates with the backend through a small JSON REST API.
 - A seeded user identifier is sent with requests through `X-User-Id` to simulate identity without implementing production authentication.
-- SQLite supports fast local development; PostgreSQL is preferred for hosted persistence.
+- PostgreSQL is the primary database for local development and hosted persistence.
+- Local configuration is loaded from an ignored `backend/.env`; hosted credentials are injected through `DATABASE_URL`.
+- Backend environment loading uses `python-dotenv` at Django startup. The frontend has a separate environment file containing browser-visible `VITE_*` values only.
+- `DATABASE_URL` is mandatory so a missing environment file cannot silently switch persistence engines.
+- SQLite remains an emergency fallback only if PostgreSQL becomes a confirmed delivery blocker.
+- Environment-specific service and API URLs are never embedded in application code. The frontend composes relative endpoint paths with `VITE_API_BASE_URL`; the backend receives origins, hosts, secrets, and database configuration through environment variables.
 
 ## Deliberate Scope Decisions
 

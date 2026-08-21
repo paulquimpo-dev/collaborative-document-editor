@@ -36,13 +36,15 @@ Commit only after the phase exit check passes. If a phase contains substantial i
 2. Create `frontend/` with Vite, React, and TypeScript.
 3. Add the required TipTap packages and only essential dependencies.
 4. Add environment-based backend API URL, Django debug, allowed-host, CORS, and database settings.
-5. Create skeletons for `README.md`, `ARCHITECTURE.md`, `AI_WORKFLOW.md`, and `SUBMISSION.md`.
-6. Confirm both development servers start before adding product code.
+5. Establish the repository rule prohibiting hardcoded environment-specific API/service URLs and secrets.
+6. Create skeletons for `README.md`, `ARCHITECTURE.md`, `AI_WORKFLOW.md`, and `SUBMISSION.md`.
+7. Confirm both development servers start before adding product code.
 
 ### Exit check
 
 - Frontend and backend run locally.
 - No optional architecture or feature has been introduced.
+- Environment-specific configuration is supplied through environment variables rather than hardcoded application values.
 
 ### Commit
 
@@ -66,11 +68,15 @@ Commit only after the phase exit check passes. If a phase contains substantial i
 3. Create and run migrations.
 4. Add an idempotent seed command for Paul and Alex.
 5. Confirm TipTap's empty JSON document can be stored and retrieved.
+6. Load local configuration from an ignored `backend/.env` file.
+7. Connect local development to PostgreSQL through `DATABASE_URL`.
+8. Run migrations, seeding, and persistence verification against PostgreSQL.
 
 ### Exit check
 
 - A clean database can migrate and seed successfully.
 - Re-running the seed command does not duplicate users.
+- The local application reports PostgreSQL as its active database engine.
 
 ### Commit
 
@@ -200,7 +206,7 @@ Commit only after the phase exit check passes. If a phase contains substantial i
 ### Work
 
 1. Deploy the backend and configure migrations, seeded users, allowed hosts, and CORS.
-2. Use managed PostgreSQL unless it becomes a material time risk.
+2. Provision managed PostgreSQL and provide its connection through `DATABASE_URL`.
 3. Deploy the frontend with the production API URL.
 4. Verify `X-User-Id` is allowed across origins.
 5. Smoke-test create, edit, save, refresh, and reopen on the live application.

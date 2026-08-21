@@ -127,13 +127,30 @@ These are deliberate scope cuts, not omissions.
 
 ## Persistence
 
--   PostgreSQL preferred
--   SQLite acceptable if PostgreSQL or deployment setup becomes a time
-    sink
+-   PostgreSQL is the primary database for local development and deployment
+-   Configure it through `DATABASE_URL` loaded from an uncommitted local
+    `.env` file and deployment-platform environment variables
+-   SQLite is an emergency fallback only if PostgreSQL becomes a confirmed
+    blocker that threatens assessment completion
 
 ## Deployment
 
 Use the fastest reliable free deployment path available.
+
+## Environment Configuration Rule
+
+Do not hardcode API base URLs, service origins, database URLs, credentials,
+secrets, deployment hosts, or other environment-specific infrastructure
+values. Load backend values from `backend/.env` locally and hosting-platform
+environment variables in deployment. Load browser-safe frontend values from
+`frontend/.env` and `VITE_*` deployment variables.
+
+Frontend API requests must combine an environment-provided base URL with
+relative REST endpoint paths. Relative application endpoint paths are part of
+the API contract and may remain code constants. Never place secrets in
+frontend environment variables. Required configuration should fail clearly
+when missing, and every new variable must be documented in the matching
+`.env.example` and README.
 
 Possible split: - Frontend: Vercel - Backend: Render
 
@@ -604,14 +621,15 @@ Implement:
 1.  User model/seed users
 2.  Document model
 3.  DocumentShare model
-4.  Serializers
-5.  Document CRUD
-6.  Current simulated user handling
-7.  Authorization
-8.  Meaningful authorization test
-9.  Sharing endpoint
-10. File import endpoint
-11. Validation
+4.  PostgreSQL connection and environment configuration
+5.  Serializers
+6.  Document CRUD
+7.  Current simulated user handling
+8.  Authorization
+9.  Meaningful authorization test
+10. Sharing endpoint
+11. File import endpoint
+12. Validation
 
 Core backend must work before adding optional features.
 
@@ -706,7 +724,9 @@ After deployment verify:
 8.  User switching works
 9.  Unauthorized access is blocked
 
-If the preferred infrastructure creates significant friction, simplify.
+PostgreSQL is the intended production database. Use SQLite only as an
+explicitly documented emergency fallback if PostgreSQL becomes a confirmed
+delivery blocker.
 
 ------------------------------------------------------------------------
 
