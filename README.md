@@ -8,7 +8,7 @@ A lightweight collaborative document editing application demonstrating rich-text
 
 ## Current Status
 
-Phase 6 adds production deployment configuration for a Render Django API with managed PostgreSQL and a Vercel Vite frontend. Live deployment verification is completed through the checklist below.
+Phase 6 is complete: the Render Django API, managed PostgreSQL database, and Vercel frontend are live, and the production create/edit/save/refresh/reopen flow has been verified.
 
 ## Planned Core Features
 
@@ -160,3 +160,8 @@ Never copy the production database URL or secret into a repository file. Render 
 - In browser developer tools, confirm protected API requests target the Render `/api` URL and include `X-User-Id` without a CORS error.
 
 Record the final frontend and backend URLs in `SUBMISSION.md` only after this smoke test passes. Free services can cold-start; document that limitation rather than adding infrastructure.
+
+Verified production services:
+
+- Frontend: `https://collab-doc-qmpo.vercel.app`
+- API health: `https://collaborative-document-editor-api.onrender.com/api/health/`

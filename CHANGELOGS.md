@@ -67,6 +67,7 @@ This file tracks meaningful project changes made during the assessment. Entries 
 - Added Render Blueprint configuration for the Django API and managed PostgreSQL deployment.
 - Added WhiteNoise production static-file handling and documented the Render/Vercel deployment and smoke-test workflow.
 - Documented that deployment-generated hosts, origins, database credentials, and secrets remain environment-provided rather than hardcoded.
+- Deployed and verified the production application on Vercel with the Django API and managed PostgreSQL hosted on Render.
 - Replaced in-app native discard confirmations with a controlled modal and fixed the user switcher becoming visually stuck after cancel/discard.
 - Removed hardcoded Django configuration defaults; secret key, debug mode, allowed hosts, CORS origins, and database URL are now required environment values.
 - Made `DATABASE_URL` mandatory so Django cannot silently fall back to SQLite when PostgreSQL configuration is missing.

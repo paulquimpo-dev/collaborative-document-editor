@@ -465,3 +465,12 @@ As implementation proceeds, this log will record the actual checks performed, in
 
 - Production configuration is ready for verification.
 - Phase 6 remains in progress until both live services are deployed and the production smoke test passes.
+
+#### Production verification
+
+- The candidate connected the GitHub repository to Render and Vercel using the documented configuration.
+- Render provisioned the Django web service and managed PostgreSQL database; the live health endpoint returned `{"status": "ok"}`.
+- Vercel deployed the Vite frontend from `frontend/` with the Render API base URL supplied through `VITE_API_BASE_URL`.
+- The generated Vercel production domain differed from the provisional origin, so `CORS_ALLOWED_ORIGINS` was corrected to the exact stable production origin and Render redeployed.
+- The candidate manually confirmed seeded users load and create, rich-text edit, save, refresh, reopen, formatting persistence, and user switching all work in production.
+- Phase 6 exit checks pass with 77 minutes 58 seconds remaining at confirmation.

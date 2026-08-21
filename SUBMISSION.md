@@ -3,7 +3,7 @@
 ## Submission Checklist
 
 - [ ] Source code
-- [ ] Live application URL
+- [x] Live application URL
 - [ ] Seeded/test users
 - [ ] README and setup instructions
 - [ ] Architecture note
@@ -16,7 +16,8 @@
 
 ## Live Application
 
-Add the verified Vercel application URL and Render API health URL here after the Phase 6 production smoke test.
+- Application: `https://collab-doc-qmpo.vercel.app`
+- API health: `https://collaborative-document-editor-api.onrender.com/api/health/`
 
 ## Seeded Users
 
